@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>КиберБезопасность 50+</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0f141c;
+    color: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 420px;
+    background: #1e2533;
+    border-radius: 28px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .status-bar {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 500;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+  }
+
+  .header {
+    background: #252e41;
+    padding: 22px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: #94a3b8;
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  .screen {
+    flex: 1;
+    padding: 24px;
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .screen.active {
+    display: flex;
+  }
+
+  .progress {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .progress-dot {
+    flex: 1;
+    height: 6px;
+    background: #334155;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .progress-dot.done {
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  }
+
+  .progress-dot.current {
+    background: #3b82f6;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+  }
+
+  .card {
+    background: #252e41;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .card.bad {
+    border-color: #ef4444;
+    background: #2e1a22;
+  }
+
+  .card.good {
+    border-color: #10b981;
+    background: #162e24;
+  }
+
+  .scene-icon {
+    font-size: 52px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .scene-title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .scene-desc {
+    font-size: 16px;
+    color: #cbd5e1;
+    text-align: center;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .message-bubble {
+    background: #151b26;
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-left: 5px solid #3b82f6;
+    margin-bottom: 8px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  .message-bubble.sms {
+    border-left-color: #f59e0b;
+  }
+
+  .message-bubble.call {
+    border-left-color: #ef4444;
+  }
+
+  .message-sender {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .btn {
+    background: #3b82f6;
+    color: #ffffff;
+    border: none;
+    padding: 18px 24px;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    font-family: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    line-height: 1.4;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn:hover {
+    background: #2563eb;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+  }
+
+  .btn.danger {
+    background: #ef4444;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+  }
+
+  .btn.danger:hover {
+    background: #dc2626;
+  }
+
+  .btn.success {
+    background: #10b981;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  }
+
+  .btn.success:hover {
+    background: #059669;
+  }
+
+  .btn.secondary {
+    background: #334155;
+    box-shadow: none;
+    color: #cbd5e1;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .btn.secondary:hover {
+    background: #475569;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .result-icon {
+    font-size: 68px;
+    text-align: center;
+    margin: 12px 0;
+  }
+
+  .result-title {
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .result-text {
+    font-size: 17px;
+    color: #cbd5e1;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .tip-box {
+    background: #151b26;
+    border-radius: 14px;
+    padding: 16px 18px;
+    border-left: 5px solid #f59e0b;
+  }
+
+  .tip-box .tip-label {
+    font-size: 13px;
+    color: #f59e0b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .tip-box p {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
+  .home-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .menu-item {
+    background: #252e41;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, border-color 0.2s;
+  }
+
+  .menu-item.completed {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: #1b2635;
+  }
+
+  .menu-item:active {
+    transform: scale(0.99);
+  }
+
+  .menu-item:hover {
+    background: #2e3952;
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .menu-icon {
+    font-size: 14px;
+    font-weight: 800;
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    padding: 8px 12px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    text-align: center;
+    min-width: 58px;
+  }
+
+  .menu-item.completed .menu-icon {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+  }
+
+  .menu-text {
+    flex: 1;
+  }
+
+  .menu-text h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+  }
+
+  .menu-text p {
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+
+  .stats {
+    display: flex;
+    gap: 14px;
+  }
+
+  .stat-box {
+    flex: 1;
+    background: #252e41;
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: #60a5fa;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .back-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    align-self: flex-start;
+  }
+
+  .back-btn:hover {
+    color: #ffffff;
+  }
+
+  .welcome-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .welcome-text strong {
+    color: #60a5fa;
+    font-weight: 600;
+  }
+
+  .final-score {
+    text-align: center;
+    font-size: 54px;
+    font-weight: 800;
+    color: #10b981;
+    margin: 12px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>Сеть 100%</span>
+  </div>
+
+  <div class="header">
+    <h1 id="headerTitle">КиберБезопасность</h1>
+    <p id="headerSub">Практический тренажёр</p>
+  </div>
+
+  <div class="screen active" id="screen-home">
+    <div class="welcome-text">
+      Здравствуйте! Этот тренажёр поможет вам <strong>научиться защищать свои данные</strong> от телефонных мошенников, фишинговых сайтов и СМС-обмана.
+    </div>
+    
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num" id="statScore">0</div>
+        <div class="stat-label">Баллов</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statDone">0/6</div>
+        <div class="stat-label">Пройдено</div>
+      </div>
+    </div>
+
+    <div class="home-menu" id="scenarios-list"></div>
+  </div>
+
+  <div class="screen" id="screen-game">
+    <button class="back-btn" onclick="showHomeScreen()">← В меню</button>
+    <div class="progress" id="gameProgress"></div>
+    <div id="gameContent" style="display: flex; flex-direction: column; gap: 16px; flex: 1;"></div>
+  </div>
+
+  <div class="screen" id="screen-feedback">
+    <div id="feedbackContent"></div>
+    <div class="btn-group">
+      <button class="btn" id="nextBtn" onclick="nextStep()">Далее</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-result">
+    <div class="result-icon">🏆</div>
+    <div class="result-title">Сценарий завершен!</div>
+    <div class="result-text" id="resultText">Вы успешно прошли тест.</div>
+    <div class="final-score" id="resultScore">0/0</div>
+    <div class="btn-group">
+      <button class="btn" onclick="showHomeScreen()">Вернуться в главное меню</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const scenarios = [
+    {
+      id: 0,
+      type: "СМС",
+      title: "СМС от «банка»",
+      desc: "Подозрительное сообщение о блокировке карты",
+      questions: [
+        {
+          icon: "✉️",
+          title: "Вам пришло СМС",
+          bubbleType: "sms",
+          sender: "900-BANK",
+          message: "Ваша банковская карта заблокирована из-за подозрительной активности. Срочно перейдите по ссылке для разблокировки: bank-secure-id82.ru",
+          desc: "Что вы предпримете?",
+          answers: [
+            { text: "Перейду по ссылке и введу данные карты", score: 0, feedback: "Ни в коем случае! Это фишинговая ссылка. Мошенники украдут все данные карты и спишут деньги.", correct: false },
+            { text: "Проигнорирую СМС или позвоню по официальному номеру банка", score: 10, feedback: "Правильно! Банки никогда не присылают ссылки для разблокировки карт. Официальный номер всегда указан на обороте самой карты.", correct: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: 1,
+      type: "ЗВОНОК",
+      title: "Служба безопасности",
+      desc: "Звонок от «сотрудника Центробанка»",
+      questions: [
+        {
+          icon: "📞",
+          title: "Вам звонят в мессенджере",
+          bubbleType: "call",
+          sender: "Центральный Банк РФ",
+          message: "«Здравствуйте, я старший специалист службы безопасности. С вашего счёта прямо сейчас пытаются перевести деньги. Нам нужно срочно перевести их на безопасный счёт!»",
+          desc: "Ваша реакция?",
+          answers: [
+            { text: "Поверлю и спрошу, куда переводить деньги", score: 0, feedback: "Опасно! Понятия 'безопасный счёт' не существует. Это стандартная уловка, чтобы вы сами отдали сбережения.", correct: false },
+            { text: "Положу трубку и самостоятельно перезвоню в свой банк", score: 10, feedback: "Отлично! Сотрудники банков или полиции никогда не звонят через WhatsApp/Telegram и не просят переводить деньги.", correct: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: 2,
+      type: "ИНТЕРНЕТ",
+      title: "Выплаты пенсионерам",
+      desc: "Сайт с обещанием крупных компенсаций",
+      questions: [
+        {
+          icon: "🌐",
+          title: "Ссылка в соцсетях",
+          bubbleType: "sms",
+          sender: "Социальные Новости",
+          message: "«Указ подписан! Всем гражданам от 50 лет назначена разовая компенсация в 25 000 рублей. Проверьте свой СНИЛС на сайте: gosuslugi-compensations.site»",
+          desc: "Как поступите?",
+          answers: [
+            { text: "Перейду и введу СНИЛС и номер карты для выплаты", score: 0, feedback: "Мошенники создали копию сайта Госуслуг. Введя данные, вы отдадите им доступ к личному кабинету и банковским счетам.", correct: false },
+            { text: "Закрою сайт и проверю информацию на официальном портале СФР или Госуслуг", score: 10, feedback: "Правильно! Любые обещания внезапных выплат на незнакомых сайтах — обман. Проверяйте информацию только на официальных доменах .gov.ru.", correct: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: 3,
+      type: "СМС",
+      title: "Случайный код",
+      desc: "Просьба переслать код подтверждения",
+      questions: [
+        {
+          icon: "💬",
+          title: "Сообщение от знакомого",
+          bubbleType: "sms",
+          sender: "Мария (Соседка)",
+          message: "«Привет! Я случайно указала твой номер телефона при восстановлении пароля, и тебе сейчас придет СМС с кодом от Госуслуг. Перешли его мне, пожалуйста!»",
+          desc: "Ваши действия?",
+          answers: [
+            { text: "Отправлю код, ведь это моя соседка просит", score: 0, feedback: "Ошибка! Аккаунт соседки взломали. Этот код — доступ к вашему собственному профилю Госуслуг. Никогда не передавайте коды из СМС!", correct: false },
+            { text: "Не отправлю код и позвоню соседке лично по телефону", score: 10, feedback: "Верно! Если аккаунт взломали, мошенники пишут от лица друзей. Личный звонок сразу прояснит ситуацию.", correct: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: 4,
+      type: "ЗВОНОК",
+      title: "Звонок от Госуслуг",
+      desc: "Сообщение о взломе личного кабинета",
+      questions: [
+        {
+          icon: "📱",
+          title: "Вам звонят на телефон",
+          bubbleType: "call",
+          sender: "Техподдержка Портала",
+          message: "«Ваш личный кабинет Госуслуг взломан! Чтобы восстановить доступ и заблокировать мошенников, назовите код, который сейчас пришел вам на телефон».",
+          desc: "Что скажете?",
+          answers: [
+            { text: "Назову код, чтобы спасти аккаунт", score: 0, feedback: "Критическая ошибка! Робот или сотрудник поддержки никогда не запрашивают коды. Назвав код, вы сами впустите мошенников.", correct: false },
+            { text: "Сброшу звонок. Настоящая техподдержка не просит коды доступа.", score: 10, feedback: "Идеально! Настоящая поддержка никогда не требует коды из СМС для проведения каких-либо операций.", correct: true }
+          ]
+        }
+      ]
+    },
+    {
+      id: 5,
+      type: "ИНТЕРНЕТ",
+      title: "Выигрыш в лотерею",
+      desc: "Уведомление о крупном призе",
+      questions: [
+        {
+          icon: "🎉",
+          title: "Всплывающее окно",
+          bubbleType: "sms",
+          sender: "ПОЗДРАВЛЯЕМ!",
+          message: "Вы выиграли автомобиль или 1 000 000 рублей! Для получения приза нужно оплатить небольшую госпошлину за перевод: 350 рублей.",
+          desc: "Ваше решение?",
+          answers: [
+            { text: "Оплачу 350 рублей, сумма ведь небольшая", score: 0, feedback: "Обман! Никакого приза нет. Вы не только потеряете 350 рублей, но и засветите данные своей карты на мошенническом сайте.", correct: false },
+            { text: "Закрою страницу. Я не участвовал ни в каких лотереях.", score: 10, feedback: "Правильно! Бесплатный сыр бывает только в мышеловке. Требование оплатить 'пошлину' или 'комиссию' для приза — 100% мошенничество.", correct: true }
+          ]
+        }
+      ]
+    }
+  ];
+
+  let totalScore = 0;
+  let completedScenariosCount = 0;
+  let currentScenario = null;
+  let currentQuestionIndex = 0;
+  let completedScenariosIds = [];
+
+  function init() {
+    renderMenu();
+    updateStatsCounters();
+  }
+
+  function renderMenu() {
+    const menuContainer = document.getElementById("scenarios-list");
+    menuContainer.innerHTML = "";
+
+    scenarios.forEach(scen => {
+      const isCompleted = completedScenariosIds.includes(scen.id);
+      const item = document.createElement("div");
+      item.className = `menu-item ${isCompleted ? 'completed' : ''}`;
+      item.onclick = () => startScenario(scen.id);
+
+      item.innerHTML = `
+        <div class="menu-icon">${scen.type}</div>
+        <div class="menu-text">
+          <h3>${scen.title}</h3>
+          <p>${scen.desc}</p>
+        </div>
+      `;
+      menuContainer.appendChild(item);
+    });
+  }
+
+  function updateStatsCounters() {
+    document.getElementById("statScore").innerText = totalScore;
+    document.getElementById("statDone").innerText = `${completedScenariosCount}/${scenarios.length}`;
+  }
+
+  function switchScreen(screenId) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(screenId).classList.add("active");
+  }
+
+  function showHomeScreen() {
+    renderMenu();
+    updateStatsCounters();
+    switchScreen("screen-home");
+  }
+
+  function startScenario(id) {
+    currentScenario = scenarios.find(s => s.id === id);
+    currentQuestionIndex = 0;
+    renderQuestion();
+    switchScreen("screen-game");
+  }
+
+  function renderQuestion() {
+    const question = currentScenario.questions[currentQuestionIndex];
+    const progressContainer = document.getElementById("gameProgress");
+    progressContainer.innerHTML = "";
+    
+    currentScenario.questions.forEach((q, idx) => {
+      const dot = document.createElement("div");
+      dot.className = "progress-dot";
+      if (idx < currentQuestionIndex) dot.className += " done";
+      if (idx === currentQuestionIndex) dot.className += " current";
+      progressContainer.appendChild(dot);
+    });
+
+    const contentContainer = document.getElementById("gameContent");
+    let btnGroupHtml = `<div class="btn-group">`;
+    question.answers.forEach((ans, index) => {
+      btnGroupHtml += `<button class="btn secondary" onclick="selectAnswer(${index})">${ans.text}</button>`;
+    });
+    btnGroupHtml += `</div>`;
+
+    contentContainer.innerHTML = `
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+        <div class="scene-icon">${question.icon}</div>
+        <div class="scene-title">${question.title}</div>
+        <div class="message-bubble ${question.bubbleType}">
+          <div class="message-sender">${question.sender}</div>
+          <div>${question.message}</div>
+        </div>
+        <div class="scene-desc" style="font-weight:600; color:#fff; text-align: left; margin-top: 4px;">${question.desc}</div>
+      </div>
+      ${btnGroupHtml}
+    `;
+  }
+
+  function selectAnswer(ansIndex) {
+    const question = currentScenario.questions[currentQuestionIndex];
+    const answer = question.answers[ansIndex];
+    totalScore += answer.score;
+
+    const feedbackContainer = document.getElementById("feedbackContent");
+    feedbackContainer.innerHTML = `
+      <div class="card ${answer.correct ? 'good' : 'bad'}">
+        <div class="scene-icon">${answer.correct ? '✅' : '❌'}</div>
+        <div class="scene-title">${answer.correct ? 'Правильно!' : 'Опасно! Это ловушка'}</div>
+        <div class="scene-desc" style="text-align:left; margin-bottom:0; color:#fff;">${answer.feedback}</div>
+      </div>
+      <div class="tip-box" style="margin-top: 15px;">
+        <div class="tip-label">💡 Совет кибербезопасности</div>
+        <p>Никогда не поддавайтесь панике и спешке, которые навязывают мошенники. Спокойно закройте страницу или положите трубку и проверьте информацию в официальном ведомстве.</p>
+      </div>
+    `;
+
+    switchScreen("screen-feedback");
+  }
+
+  function nextStep() {
+    currentQuestionIndex++;
+    
+    if (currentQuestionIndex < currentScenario.questions.length) {
+      renderQuestion();
+      switchScreen("screen-game");
+    } else {
+      if (!completedScenariosIds.includes(currentScenario.id)) {
+        completedScenariosIds.push(currentScenario.id);
+        completedScenariosCount++;
+      }
+      let maxScenScore = currentScenario.questions.length * 10;
+      
+      document.getElementById("resultText").innerHTML = `Вы успешно разобрали ситуацию: <br><strong>«${currentScenario.title}»</strong>.`;
+      document.getElementById("resultScore").innerText = `+${maxScenScore} Баллов`;
+      
+      switchScreen("screen-result");
+    }
+  }
+
+  window.onload = init;
+</script>
+</body>
+</html>
